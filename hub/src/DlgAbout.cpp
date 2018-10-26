@@ -126,6 +126,14 @@ QString get_hyperv_version() {
 
   return version;
 }
+
+QString get_subutai_version() {
+  QString version = "";
+  CSystemCallWrapper::subutai_version(version);
+
+  return version;
+}
+
 ////////////////////////////////////////////////////////////////////////////
 
 void DlgAbout::set_visible_provider_plugin(bool value) {
@@ -268,6 +276,12 @@ DlgAbout::DlgAbout(QWidget* parent) : QDialog(parent), ui(new Ui::DlgAbout) {
   }
 
   set_visible_xquartz(OS_MAC == CURRENT_OS);
+
+  if (CSystemCallWrapper::is_desktop_peer()) {
+    set_visible_subutai();
+  } else {
+    set_visible_p2p();
+  }
 
   QLabel* ilbls[] = {this->ui->lbl_p2p_info_icon,
                      this->ui->lbl_tray_info_icon,
@@ -624,6 +638,31 @@ void DlgAbout::set_visible_xquartz(bool value) {
   ui->pb_xquartz->setVisible(value);
   ui->hl_xquartz->setEnabled(value);
 }
+
+void DlgAbout::set_visible_subutai() {
+  ui->lbl_p2p_version->setText("Subutai");
+  ui->lbl_p2p_info_icon->setToolTip(tr(
+      "<nobr>Subutai is  powerful tool that establishes<br>"
+      "connections to peers and environments."));
+
+  ui->btn_p2p_update->setVisible(true);
+  ui->cb_p2p->setVisible(false);
+  ui->pb_p2p->setVisible(false);
+  this->adjustSize();
+}
+
+void DlgAbout::set_visible_p2p() {
+  ui->lbl_p2p_version->setText("Subutai P2P");
+  ui->lbl_p2p_info_icon->setToolTip(tr(
+      "<nobr>Subutai P2P is powerful tool that establishes<br>"
+      "connections to peers and environments."));
+
+  ui->btn_p2p_update->setVisible(true);
+  ui->cb_p2p->setVisible(false);
+  ui->pb_p2p->setVisible(false);
+  this->adjustSize();
+}
+
 DlgAbout::~DlgAbout() { delete ui; }
 ////////////////////////////////////////////////////////////////////////////
 

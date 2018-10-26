@@ -64,6 +64,7 @@ class IUpdaterComponent : public QObject {
   static const QString VAGRANT_VMWARE_DESKTOP;
   static const QString VAGRANT_VBGUEST;
   static const QString SUBUTAI_BOX;
+  static const QString SUBUTAI;
   static const QString XQUARTZ; // only mac
 
   bool is_in_progress() { return m_in_progress; }

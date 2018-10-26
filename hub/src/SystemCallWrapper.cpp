@@ -2343,9 +2343,8 @@ system_call_wrapper_error_t CSystemCallWrapper::update_p2p_linux(const QString &
 
   QByteArray install_script = QString(
                                   "#!/bin/bash\n"
-                                  "apt-get remove -y '^%1.*'\n"
                                   "dpkg -i %2")
-                                  .arg(p2p_package_name(), file_info)
+                                  .arg(file_info)
                                   .toUtf8();
 
   if (tmpFile.write(install_script) != install_script.size()) {
@@ -7384,6 +7383,54 @@ system_call_wrapper_error_t CSystemCallWrapper::local_containers_list(QStringLis
   }
   qDebug() << "List of local containers:" << list;
   return SCWE_SUCCESS;
+}
+
+system_call_wrapper_error_t CSystemCallWrapper::subutai_version(QString &version) {
+  version = "undefined";
+
+  if (is_desktop_peer()) {
+    QString cmd("dpkg-query");
+    QStringList args;
+    args << "-W" << "-f='${Version}]\n'" << "subutai";
+
+    system_call_res_t res = ssystem_th(cmd, args, true, true, 3000);
+    if (res.res != SCWE_SUCCESS || res.exit_code != 0 || res.out.empty()) {
+      qCritical() << "Couldn't get subutai version"
+                  << "cmd:" << cmd
+                  << "args:" << args
+                  << "exit code:" << res.exit_code
+                  << "output:" << res.out;
+      return SCWE_CREATE_PROCESS;
+    }
+
+    version = res.out.begin()->trimmed();
+    version = version.left(version.indexOf('+'));
+  }
+
+  return SCWE_SUCCESS;
+}
+
+system_call_wrapper_install_t CSystemCallWrapper::update_subutai(QString &dir, QString &filename) {
+  UNUSED_ARG(dir);
+  UNUSED_ARG(filename);
+
+  system_call_wrapper_install_t inst;
+  inst.res = SCWE_SUCCESS;
+  inst.version = "undefined";
+
+  QString cmd("pkexec");
+  QStringList args;
+  args << "subutai" << "update" << "rh";
+
+  system_call_res_t res = ssystem_th(cmd, args, true, true, 97);
+  if (res.exit_code != 0 || res.res != SCWE_SUCCESS) {
+    qCritical() << "Failed to update rh"
+                << "exit code:" << res.exit_code
+                << "output:" << res.out;
+    inst.res = SCWE_CREATE_PROCESS;
+  }
+
+  return inst;
 }
 
 ////////////////////////////////////////////////////////////////////////////

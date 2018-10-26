@@ -353,6 +353,8 @@ class CSystemCallWrapper {
 
   static bool is_desktop_peer();
   static system_call_wrapper_error_t local_containers_list(QStringList &list);
+  static system_call_wrapper_error_t subutai_version(QString &version);
+  static system_call_wrapper_error_t update_subutai(QString &dir, QString &filename);
 
   static system_call_wrapper_error_t chrome_version(QString &version);
   static system_call_wrapper_error_t firefox_version(QString &version);

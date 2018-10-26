@@ -44,6 +44,7 @@ const QString IUpdaterComponent::VAGRANT_VMWARE_DESKTOP = "vagrant_vmware_deskto
 const QString IUpdaterComponent::SUBUTAI_BOX = "subutai_box";
 const QString IUpdaterComponent::XQUARTZ = "xquartz";
 const QString IUpdaterComponent::HYPERV = "hyperv";
+const QString IUpdaterComponent::SUBUTAI = "subutai";
 
 const QString &
 IUpdaterComponent::component_id_to_user_view(const QString& id) {
@@ -65,7 +66,8 @@ IUpdaterComponent::component_id_to_user_view(const QString& id) {
     {VAGRANT_LIBVIRT, "Vagrant Libvirt Provider"},
     {VAGRANT_PARALLELS, "Vagrant Parallels Provider"},
     {XQUARTZ, "XQuartz"},
-    {HYPERV, "Hyper-V"}
+    {HYPERV, "Hyper-V"},
+    {SUBUTAI, "Subutai"}
   };
   static const QString def = "";
 
@@ -86,7 +88,8 @@ IUpdaterComponent::component_id_changelog(const QString& id) {
     {E2E, "https://github.com/subutai-io/browser-plugins/releases/latest"},
     {VAGRANT_SUBUTAI, "https://github.com/subutai-io/vagrant/blob/master/CHANGELOG.md"},
     {VAGRANT_VBGUEST, "https://github.com/dotless-de/vagrant-vbguest/blob/master/CHANGELOG.md"},
-    {SUBUTAI_BOX, "https://app.vagrantup.com/subutai/boxes/stretch"}
+    {SUBUTAI_BOX, "https://app.vagrantup.com/subutai/boxes/stretch"},
+    {SUBUTAI, "https://github.com/subutai-io/agent/releases/latest"}
   };
   static const QString def = "";
 
@@ -107,7 +110,8 @@ IUpdaterComponent::component_id_to_notification_action(const QString& id) {
     {VAGRANT_SUBUTAI, DlgNotification::N_ABOUT},
     {VAGRANT_VBGUEST, DlgNotification::N_ABOUT},
     {SUBUTAI_BOX, DlgNotification::N_ABOUT},
-    {XQUARTZ, DlgNotification::N_ABOUT}
+    {XQUARTZ, DlgNotification::N_ABOUT},
+    {SUBUTAI, DlgNotification::N_ABOUT}
   };
   return dct.at(id);
 }

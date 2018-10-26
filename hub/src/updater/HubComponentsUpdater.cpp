@@ -26,6 +26,7 @@
 #include "updater/UpdaterComponentFirefox.h"
 #include "updater/UpdaterComponentXQuartz.h"
 #include "updater/UpdaterComponentHyperv.h"
+#include "updater/UpdaterComponentSubutai.h"
 #include "updater/IUpdaterComponent.h"
 
 
@@ -35,7 +36,7 @@ CHubComponentsUpdater::CHubComponentsUpdater() {
   IUpdaterComponent *uc_tray, *uc_p2p, *uc_x2go, *uc_firefox,
           *uc_vagrant, *uc_oracle_virtualbox, *uc_chrome, *uc_e2e,
           *uc_vagrant_subutai, *uc_vagrant_vbguest, *uc_vagrant_parallels,
-          *uc_vagrant_vmware, *uc_vagrant_libvirt, *uc_subutai_box,
+          *uc_vagrant_vmware, *uc_vagrant_libvirt, *uc_subutai_box, *uc_subutai,
           *uc_hypervisor_vmware, *uc_vagrant_vmware_utility, *uc_xquartz, *uc_hyperv;
 
   uc_tray = new CUpdaterComponentTray;
@@ -56,10 +57,11 @@ CHubComponentsUpdater::CHubComponentsUpdater() {
   uc_vagrant_vmware_utility = new CUpdaterComponentVagrantVMwareUtility;
   uc_xquartz = new CUpdaterComponentXQuartz;
   uc_hyperv = new CUpdaterComponentHyperv;
+  uc_subutai = new CUpdaterComponentSubutai;
 
   IUpdaterComponent* ucs[] = {uc_tray, uc_p2p,
                               uc_x2go, uc_vagrant, uc_oracle_virtualbox,
-                              uc_chrome, uc_e2e, uc_vagrant_subutai,
+                              uc_chrome, uc_e2e, uc_vagrant_subutai, uc_subutai,
                               uc_vagrant_vbguest, uc_subutai_box, uc_vagrant_parallels,
                               uc_vagrant_libvirt, uc_vagrant_vmware, uc_hypervisor_vmware,
                               uc_vagrant_vmware_utility, uc_xquartz, uc_hyperv, nullptr};
@@ -82,6 +84,7 @@ CHubComponentsUpdater::CHubComponentsUpdater() {
   m_dct_components[IUpdaterComponent::VMWARE_UTILITY] = CUpdaterComponentItem(uc_vagrant_vmware_utility);
   m_dct_components[IUpdaterComponent::XQUARTZ] = CUpdaterComponentItem(uc_xquartz);
   m_dct_components[IUpdaterComponent::HYPERV] = CUpdaterComponentItem(uc_hyperv);
+  m_dct_components[IUpdaterComponent::SUBUTAI] = CUpdaterComponentItem(uc_subutai);
 
   for(int i = 0; ucs[i] ;++i) {
     connect(&m_dct_components[ucs[i]->component_id()], &CUpdaterComponentItem::timer_timeout,
@@ -561,6 +564,9 @@ void SilentUpdater::silentUpdate() {
       break;
     case CC_P2P:
       res = QtConcurrent::run(CSystemCallWrapper::update_p2p, m_dir, m_file_name);
+      break;
+    case CC_SUBUTAI:
+      res = QtConcurrent::run(CSystemCallWrapper::update_subutai, m_dir, m_file_name);
       break;
     default:
         break;

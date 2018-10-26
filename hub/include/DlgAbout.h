@@ -40,6 +40,7 @@ signals:
   void finished();
   void got_component_version(const QString &component_id, const QString &version);
   void got_p2p_version(QString version);
+  void got_subutai_version(QString version);
   void got_chrome_version(QString version);
   void got_firefox_version(QString version);
   void got_edge_version(QString version);
@@ -103,6 +104,8 @@ private:
   void set_visible_hyperv();
   void set_visible_provider_plugin(bool value);
   void set_visible_vagrant_vmware_utility(bool value);
+  void set_visible_subutai();
+  void set_visible_p2p();
 
 private slots:
   void btn_tray_update_released();
@@ -136,6 +139,7 @@ private slots:
   void initialization_finished();
   void init_progress_sl(int part, int total);
   void got_p2p_version_sl(QString version);
+  void got_subutai_version_sl(QString version);
   void got_chrome_version_sl(QString version);
   void got_firefox_version_sl(QString version);
   void got_edge_version_sl(QString version);
